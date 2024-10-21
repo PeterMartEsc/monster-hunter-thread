@@ -9,9 +9,9 @@ import java.util.Random;
 public class MonsterHunter extends Thread {
     private Hunter hunter;
     private Monster monster;
-    private static Mapa mapa = new Mapa(1, 5);
+    private static Mapa mapa = new Mapa(1, 3);
 
-    public MonsterHunter(Hunter hunter) {
+    /*public MonsterHunter(Hunter hunter) {
         this.hunter = hunter;
     }
     /*public MonsterHunter(Monster monster) {
@@ -22,7 +22,7 @@ public class MonsterHunter extends Thread {
 
     public static void main(String[] args) {
 
-        Monster rathalos = new Monster(1, "Rathalos",9, 9);
+        Monster rathalos = new Monster(1, "Rathalos",2, 2);
         Hunter maxi = new Hunter(1, "Maxi",0 , 0,0, mapa);
 
         mapa.setHunterPositionX(maxi.getPositionX());
@@ -30,11 +30,9 @@ public class MonsterHunter extends Thread {
         mapa.setMonsterPositionX(rathalos.getPositionX());
         mapa.setMonsterPositionY(rathalos.getPositionY());
 
-        Thread cazador1 = new Thread(new MonsterHunter(maxi));
-        //Thread monstruo1 = new Thread(new MonsterHunter(rathalos));
+        Thread cazador1 = new Thread(maxi);
 
         cazador1.start();
-        //monstruo1.start();
 
     }
 }

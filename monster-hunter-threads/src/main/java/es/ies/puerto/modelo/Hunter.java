@@ -78,10 +78,25 @@ public class Hunter extends Thread {
         long tiempoInicio = System.currentTimeMillis();
 
         while(this.getMonstruosAtrapados() == 0 && !TIEMPO_AGOTADO){
+
             long tiempoActual = System.currentTimeMillis();
 
             this.getMapa().moverCazador(this);
+
+            try {
+
+                sleep(1000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
             this.getMapa().explorar(this);
+
+            try {
+                sleep(2000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
 
             if(tiempoActual - tiempoInicio >= TIEMPO_MAXIMO){
                 System.out.println("Se ha acabado el tiempo");
