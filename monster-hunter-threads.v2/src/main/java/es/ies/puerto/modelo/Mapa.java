@@ -60,30 +60,22 @@ public class Mapa {
     }
 
     public synchronized void agregarHunter(Hunter hunter){
-        listaHunters.put(hunter.getId(), hunter);
+        listaHunters.put(hunter.getIdHunter(), hunter);
     }
 
     public synchronized void agregarMonstruo(Monster monster){
-        listaMonsters.put(monster.getId(), monster);
+        listaMonsters.put(monster.getIdMonster(), monster);
     }
 
     public synchronized void eliminarHunter(Hunter hunter){
-        listaMonsters.remove(hunter.getId());
+        //listaMonsters.remove(hunter.getIdHunter());
     }
 
     public synchronized void eliminarMonstruo(Monster monster){
         listaMonsters.remove(monster.getId());
     }
 
-    public boolean pelea(){
-        Random random = new Random();
-        int result = random.nextInt(1);
-        if(result>0){
-            return true;
-        } else {
-            return false;
-        }
-    }
+
     public synchronized boolean hayHunter (int X, int Y){
         boolean hayHunter = false;
 
@@ -115,6 +107,80 @@ public class Mapa {
         }
 
         return hayMonstruo;
+    }
+
+    public synchronized void moverHunter(Hunter hunter){
+
+        Random random = new Random();
+
+        int X = random.nextInt(hunter.getMap().getTamanio());
+        int Y = random.nextInt(hunter.getMap().getTamanio());
+
+        while(hunter.getMap().hayHunter(X, Y)){
+            X = random.nextInt(hunter.getMap().getTamanio());
+            Y = random.nextInt(hunter.getMap().getTamanio());
+        }
+
+        hunter.setPositionX(X);
+        hunter.setPositionY(Y);
+
+        System.out.println(hunter.getNombre() + " se movió a: X=" +hunter.getPositionX()+" Y=" +hunter.getPositionY());
+
+        hunter.getMap().agregarHunter(hunter);
+
+    }
+
+    public synchronized void moverMonster(Monster monster){
+
+        Random random = new Random();
+
+        int X = random.nextInt(monster.getMap().getTamanio());
+        int Y = random.nextInt(monster.getMap().getTamanio());
+
+        while(monster.getMap().hayMonstruo(X, Y)){
+            X = random.nextInt(monster.getMap().getTamanio());
+            Y = random.nextInt(monster.getMap().getTamanio());
+        }
+
+        monster.setPositionX(X);
+        monster.setPositionY(Y);
+
+        System.out.println(monster.getNombre() + " se movió a: X=" +monster.getPositionX()+" Y=" +monster.getPositionY());
+
+        monster.getMap().agregarMonstruo(monster);
+    }
+
+    public synchronized void explorar(Hunter hunter){
+
+        for(Monster monster : hunter.getMap().getListaMonsters().values()){
+
+            if(hunter.getPositionX() == monster.getPositionX() && hunter.getPositionY() == monster.getPositionY()){
+                boolean caza = pelea();
+
+                if(caza){
+                    System.out.println(hunter.getNombre() + " ha cazado a " + monster.getName());
+                    hunter.setMonstruosAtrapados(hunter.getMonstruosAtrapados()+1);
+
+                    hunter.getMap().eliminarMonstruo(monster);
+                } else {
+
+                    System.out.println(monster.getName() + " ha escapado de " +hunter.getNombre());
+                }
+            }
+
+        }
+
+        System.out.println(hunter.getNombre()+ " no ha encontrado nada");
+    }
+
+    public boolean pelea(){
+        Random random = new Random();
+        int result = random.nextInt(2);
+        if(result>0){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

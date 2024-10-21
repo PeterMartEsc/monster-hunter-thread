@@ -81,27 +81,38 @@ public class Hunter extends Thread{
         while(!TIEMPO_AGOTADO){
             long tiempoActual = System.currentTimeMillis();
 
-            for(Hunter hunter : this.getMap().getListaHunters().values()){
-                moverHunter(hunter);
-                for(Monster monster : mapa.getListaMonsters().values()){
-                    moverMonster(monster);
+            //for(Hunter hunter : this.getMap().getListaHunters().values()){
+
+                this.getMap().moverHunter(this);
+
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
                 }
-            }
+
+                this.getMap().explorar(this);
+
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            //}
 
             if(tiempoActual - tiempoInicio >= TIEMPO_MAXIMO){
-                System.out.println("Se ha acabado el tiempo");
                 TIEMPO_AGOTADO = true;
             }
 
+            try {
+                Thread.sleep(8000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
         }
 
-        System.out.println("¡¡¡¡¡La cacería ha terminado!!!!!");
-
-        for(Hunter hunter : mapa.getListaHunters().values()){
-            System.out.println(hunter.getNombre() + " ha cazado " +hunter.getMonstruosAtrapados());
-        }
-
-        System.out.println("Han sobrevivido: " +mapa.getListaMonsters().size() +" monstruos");
+        System.out.println("¡¡¡¡¡La cacería ha terminado!!!!! " +this.getNombre() + " ha cazado " +this.getMonstruosAtrapados());
     }
 
     @Override
