@@ -16,8 +16,7 @@ public class MonsterHunter extends Thread {
     private static ArrayList<String> nombresMonsters;
     //private static ArrayList<String> nombresHunters;
     private static Mapa mapa = new Mapa(1, 9);
-    private final static int TIEMPO_MAXIMO = 60000;
-    private static boolean TIEMPO_AGOTADO = false;
+
 
     public MonsterHunter(Hunter hunter) {
         this.hunter = hunter;
@@ -32,32 +31,7 @@ public class MonsterHunter extends Thread {
         generarMonstruos();
         generarHunters();
 
-        long tiempoInicio = System.currentTimeMillis();
 
-        while(!TIEMPO_AGOTADO){
-            long tiempoActual = System.currentTimeMillis();
-
-            for(Hunter hunter : mapa.getListaHunters().values()){
-                moverHunter(hunter);
-                for(Monster monster : mapa.getListaMonsters().values()){
-                    moverMonster(monster);
-                }
-            }
-
-            if(tiempoActual - tiempoInicio >= TIEMPO_MAXIMO){
-                System.out.println("Se ha acabado el tiempo");
-                TIEMPO_AGOTADO = true;
-            }
-
-        }
-
-        System.out.println("¡¡¡¡¡La cacería ha terminado!!!!!");
-
-        for(Hunter hunter : mapa.getListaHunters().values()){
-            System.out.println(hunter.getNombre() + " ha cazado " +hunter.getMonstruosAtrapados());
-        }
-
-        System.out.println("Han sobrevivido: " +mapa.getListaMonsters().size() +" monstruos");
         //System.out.println("Los cazadores supervivientes son: " +mapa.getListaHunters().values());
     }
 
@@ -75,7 +49,7 @@ public class MonsterHunter extends Thread {
                 X = random.nextInt(mapa.getTamanio());
                 Y = random.nextInt(mapa.getTamanio());
             }
-            Monster monster = new Monster(i, nombresMonsters.get(random.nextInt(nombresMonsters.size())), X, Y);
+            Monster monster = new Monster(i, nombresMonsters.get(random.nextInt(nombresMonsters.size())), X, Y, mapa);
             mapa.agregarMonstruo(monster);
 
             Thread monstruo = new Thread(new MonsterHunter(monster));
@@ -100,7 +74,7 @@ public class MonsterHunter extends Thread {
                 Y = random.nextInt(mapa.getTamanio());
             }
 
-            Hunter hunter = new Hunter(i, "Cazador "+(i+1),0 , X, Y);
+            Hunter hunter = new Hunter(i, "Cazador "+(i+1),0 , X, Y, mapa);
             mapa.agregarHunter(hunter);
 
             Thread cazador = new Thread(new MonsterHunter(hunter));

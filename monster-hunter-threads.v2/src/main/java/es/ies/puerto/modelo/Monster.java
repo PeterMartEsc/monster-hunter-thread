@@ -8,12 +8,14 @@ public class Monster {
     private String name;
     private int positionX;
     private int positionY;
+    private Mapa map;
 
-    public Monster(int id, String name, int positionX, int positionY) {
+    public Monster(int id, String name, int positionX, int positionY, Mapa map) {
         this.id = id;
         this.name = name;
         this.positionX = positionX;
         this.positionY = positionY;
+        this.map = map;
     }
 
     public int getId() {

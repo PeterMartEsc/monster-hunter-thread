@@ -15,6 +15,7 @@ public class Mapa {
     private HashMap<Integer, Hunter> listaHunters;
     private HashMap<Integer, Monster> listaMonsters;
 
+
     /*public Mapa(int mapId) {
         this.mapId = mapId;
     }*/
