@@ -1,3 +1,5 @@
+<div style="text-align: justify">
+
 # Monster Hunter Threads
 
 ### Introduccion
@@ -13,3 +15,5 @@ Actualmente el proyecto tiene __dos versiones__ y se esta trabajando en la __ter
 - [Version 2](https://github.com/PeterMartEsc/monster-hunter-thread/tree/v2)
 
 - [Version 3]()
+
+</div>
