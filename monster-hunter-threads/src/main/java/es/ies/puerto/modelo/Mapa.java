@@ -1,6 +1,5 @@
 package es.ies.puerto.modelo;
 
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
 
@@ -90,6 +89,43 @@ public class Mapa {
     public synchronized void agregarHunter(Hunter hunter){
         positionsHunter.put(hunter.getPositionX(), hunter.getPositonY());
     }*/
+
+    public synchronized void moverCazador(Hunter hunter){
+
+        Random random = new Random();
+        hunter.setPositionX( random.nextInt( hunter.getMapa().getHunterPositionX() ) );
+        hunter.setPositionY( random.nextInt( hunter.getMapa().getHunterPositionY() ) );
+
+        System.out.println(hunter.getNombre() + " se movió a: X=" +hunter.getPositionX()+" Y=" +hunter.getPositionY());
+
+        hunter.getMapa().setHunterPositionX(hunter.getPositionX());
+        hunter.getMapa().setHunterPositionY(hunter.getPositionY());
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public synchronized void explorar(Hunter hunter){
+        if(hunter.getPositionX() == hunter.getMapa().getMonsterPositionX() && hunter.getPositionY() == hunter.getMapa().getMonsterPositionY()){
+            if(pelea()){
+                System.out.println(hunter.getNombre() + " ha capturado al monstruo ");
+                hunter.setMonstruosAtrapados(1);
+            } else {
+                System.out.println("El monstruo ha despistado a " + hunter.getNombre());
+            }
+        }
+
+        System.out.println(hunter.getNombre()+ " sigue buscando");
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public boolean pelea(){
         Random random = new Random();
