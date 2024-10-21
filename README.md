@@ -4,9 +4,7 @@
 
 ### Introduccion
 
-En este repositorio trabajaremos las diferentes versiones de la tarea de __Monster-Hunter__ con _threads_ para la asignatura de __PGV__.
-
-Actualmente el proyecto tiene __dos versiones__ y se esta trabajando en la __tercera__.
+Este es el repositorio de la version 3 del proyecto.
 
 ### Indice
 
