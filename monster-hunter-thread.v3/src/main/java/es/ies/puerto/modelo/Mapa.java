@@ -15,6 +15,8 @@ public class Mapa {
     private HashMap<Integer, Hunter> listaHunters;
     private HashMap<Integer, Monster> listaMonsters;
 
+    private Cueva cueva;
+
 
     /*public Mapa(int mapId) {
         this.mapId = mapId;
@@ -25,6 +27,7 @@ public class Mapa {
         this.tamanio = tamanio;
         this.listaHunters = new HashMap<>();
         this.listaMonsters = new HashMap<>();
+        this.cueva = new Cueva();
     }
 
     public int getMapId() {
@@ -57,6 +60,14 @@ public class Mapa {
 
     public void setListaMonsters(HashMap<Integer, Monster> listaMonsters) {
         this.listaMonsters = listaMonsters;
+    }
+
+    public Cueva getCueva() {
+        return cueva;
+    }
+
+    public void setCueva(Cueva cueva) {
+        this.cueva = cueva;
     }
 
     public synchronized void agregarHunter(Hunter hunter){
@@ -109,6 +120,17 @@ public class Mapa {
         return hayMonstruo;
     }
 
+    public synchronized boolean hayCueva (int X, int Y){
+
+        boolean hayCueva = false;
+
+        if(cueva.getPositionX() == X && cueva.getPositionY() == Y){
+            hayCueva = true;
+        }
+
+        return hayCueva;
+    }
+
     public synchronized void moverHunter(Hunter hunter){
 
         Random random = new Random();
@@ -137,7 +159,16 @@ public class Mapa {
         int X = random.nextInt(monster.getMap().getTamanio());
         int Y = random.nextInt(monster.getMap().getTamanio());
 
-        while(monster.getMap().hayMonstruo(X, Y)){
+        if(monster.getMap().hayCueva(X, Y)){
+            monster.setPositionX(-1);   //Así no podrá chocar contra ningun monstruo ni hunter y se moverá nada más salir
+            monster.setPositionY(-1);   //Así no podrá chocar contra ningun monstruo ni hunter y se moverá nada más salir
+            monster.getMap().agregarMonstruo(monster);
+            System.out.println(monster.getNombre()+" encontró una cueva con espacio");
+            monster.getMap().getCueva().entrarCueva(monster);
+            moverMonster(monster);
+        }
+
+        while(monster.getMap().hayMonstruo(X, Y) || monster.getPositionX() < 0){
             X = random.nextInt(monster.getMap().getTamanio());
             Y = random.nextInt(monster.getMap().getTamanio());
         }
@@ -146,11 +177,17 @@ public class Mapa {
         monster.setPositionY(Y);
 
         System.out.println(monster.getNombre() + " se movió a: X=" +monster.getPositionX()+" Y=" +monster.getPositionY());
-
         monster.getMap().agregarMonstruo(monster);
+
     }
 
     public synchronized void explorar(Hunter hunter){
+
+        if(hayCueva(hunter.getPositionX(), hunter.getPositionY())){
+            System.out.println("Ante el cazador se yergue una imponente cueva.\n" +
+                    "Entrar en ella podría suponer la muerte segura. El cazador sigue su rumbo");
+            return;
+        }
 
         for(Monster monster : hunter.getMap().getListaMonsters().values()){
 
@@ -160,10 +197,9 @@ public class Mapa {
                 if(caza){
                     System.out.println(hunter.getNombre() + " ha cazado a " + monster.getName());
                     hunter.setMonstruosAtrapados(hunter.getMonstruosAtrapados()+1);
-
                     hunter.getMap().eliminarMonstruo(monster);
+                    monster.setCazado(true);
                 } else {
-
                     System.out.println(monster.getName() + " ha escapado de " +hunter.getNombre());
                 }
             }

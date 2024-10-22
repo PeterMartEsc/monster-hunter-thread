@@ -8,6 +8,7 @@ public class Monster extends Thread {
     private String nombre;
     private int positionX;
     private int positionY;
+    private boolean cazado = false;
     private Mapa map;
 
     public Monster(int idMonster, String nombre, int positionX, int positionY, Mapa map) {
@@ -58,6 +59,14 @@ public class Monster extends Thread {
         this.map = map;
     }
 
+    public boolean isCazado() {
+        return cazado;
+    }
+
+    public void setCazado(boolean cazado) {
+        this.cazado = cazado;
+    }
+
     @Override
     public void run(){
         int TIEMPO_MAXIMO = 60000;
@@ -80,14 +89,12 @@ public class Monster extends Thread {
                 }
             //}
 
-            if(tiempoActual - tiempoInicio >= TIEMPO_MAXIMO){
-                System.out.println("Se ha acabado el tiempo de los monstruos");
+            if(tiempoActual - tiempoInicio >= TIEMPO_MAXIMO || this.isCazado()){
+                System.out.println(this.getNombre()+" se ha detenido");
                 TIEMPO_AGOTADO = true;
             }
 
         }
-
-        //System.out.println("¡¡¡¡¡La cacería ha terminado!!!!!");
 
         System.out.println(this.getNombre()+" ha sobrevivido");
     }
